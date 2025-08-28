@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
 # Import the secrets manager
-from shared.secrets_manager import get_secret
+from opal_shared_utils.secrets_manager import get_secret
 
 # Retrieve the database URL from the secrets manager
 # This allows for dynamic configuration via .env, environment variables, keychain, or cloud secret manager

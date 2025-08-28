@@ -10,8 +10,8 @@ from sqlalchemy.pool import StaticPool
 load_dotenv()
 
 # Import database components
-from shared.database_base.database import Base, SessionLocal, engine, get_db
-from shared.database_base.models.user import User
+from opal_database.database_base.database import Base, SessionLocal, engine, get_db
+from opal_database.database_base.models.user import User
 
 # Override the engine and SessionLocal for testing to use an in-memory SQLite database
 # This is crucial to prevent tests from interfering with the actual development database

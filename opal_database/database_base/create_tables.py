@@ -1,5 +1,5 @@
-import shared.database_base.models.user  # Import models to create tables
-from shared.database_base.database import Base, engine
+import opal_database.database_base.models.user  # Import models to create tables
+from opal_database.database_base.database import Base, engine
 
 
 def create_db_tables():

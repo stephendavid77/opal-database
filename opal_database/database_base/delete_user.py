@@ -9,8 +9,8 @@ if project_root not in sys.path:
 
 from sqlalchemy.sql import or_
 
-from shared.database_base.database import SessionLocal
-from shared.database_base.models.user import User
+from opal_database.database_base.database import SessionLocal
+from opal_database.database_base.models.user import User
 
 
 def delete_user(identifier):

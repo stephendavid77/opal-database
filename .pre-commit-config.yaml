@@ -8,8 +8,8 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/stephendavid77/opal-dev-tools
-    rev: 49317b2 # Specific commit hash of opal-dev-tools
-    hooks:
+    rev: 2f75b60 # Specific commit hash of opal-dev-tools
+    hooks: # These hooks are defined in opal-dev-tools/.pre-commit-hooks.yaml
       - id: black
       - id: isort
       - id: flake8

@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import (  # Although using SQLite, keep for 
     UUID,
 )
 
-from shared.database_base.database import Base
+from opal_database.database_base.database import Base
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

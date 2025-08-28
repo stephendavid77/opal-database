@@ -11,8 +11,8 @@ from auth_service.utils.password_hasher import hash_password
 from sqlalchemy import func  # Import func
 from sqlalchemy.sql import or_  # Import or_
 
-from shared.database_base.database import SessionLocal
-from shared.database_base.models.user import User
+from opal_database.database_base.database import SessionLocal
+from opal_database.database_base.models.user import User
 
 
 def create_superuser(username, email, password):
