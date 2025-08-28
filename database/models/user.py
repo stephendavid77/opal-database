@@ -26,6 +26,9 @@ class User(Base):
     refresh_token_expires_at = Column(DateTime, nullable=True)  # Added new column
     otp_code = Column(String(6), nullable=True)
     otp_expiry = Column(DateTime, nullable=True)
+    social_provider = Column(String(50), nullable=True)
+    social_id = Column(String(255), nullable=True)
+    profile_picture_url = Column(String(255), nullable=True)
 
     def __repr__(self):
         return f"<User {self.username}>"
