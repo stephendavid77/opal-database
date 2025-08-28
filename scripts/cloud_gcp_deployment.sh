@@ -3,12 +3,16 @@
 # This script deploys a PostgreSQL instance to Google Cloud SQL.
 
 # --- Configuration ---
-PROJECT_ID="your-gcp-project-id" # REPLACE WITH YOUR GCP PROJECT ID
-REGION="us-central1"             # REPLACE WITH YOUR DESIRED GCP REGION
+# Environment variables should be loaded from a .env file.
+# The opal-shared-utils library provides a mechanism for loading these in Python applications.
+# For shell scripts, you can load them using 'source .env' or similar.
+
+PROJECT_ID="${GCP_PROJECT_ID}" # Get from environment variable
+REGION="${GCP_REGION}"         # Get from environment variable
 INSTANCE_NAME="opalsuite-db-instance" # Cloud SQL instance name
 DATABASE_NAME="opalsuite_db"     # Database name within the instance
-DB_USER="opalsuite_user"         # Database user
-DB_PASSWORD="your_strong_password" # REPLACE WITH A STRONG PASSWORD
+DB_USER="${DB_USER}"         # Database user
+DB_PASSWORD="${DB_PASSWORD}" # Get from environment variable
 
 # --- Deployment Steps ---
 
