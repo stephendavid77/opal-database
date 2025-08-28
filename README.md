@@ -84,16 +84,23 @@ DB_PASSWORD="your_strong_db_password"
 
 ## Local Development Setup
 
-1.  **Install Dependencies:**
+1.  **Install Dependencies and Initialize Database:**
+    The `scripts/standalone.sh` script automates the local setup, including installing Python dependencies, creating database tables (using SQLite by default), and running unit tests.
+
+    To run it:
     ```bash
-    pip install -r requirements.txt
+    ./scripts/standalone.sh
     ```
-    or
+    Ensure `DATABASE_URL` is set in your environment or within the script for specific database connections.
+
+2.  **Docker Development:**
+    The `scripts/standalone_docker.sh` script is designed to run inside the `opal-database` Docker container. It handles dependency installation and database table creation/migration within the container.
+
+    To build and run the `opal-database` service using Docker Compose:
     ```bash
-    pip install -e . # If installed as an editable package
+    docker-compose up --build opal-database
     ```
-2.  **Database Initialization:**
-    The database schema is typically created by the application that uses this module (e.g., `opal-auth-backend`) upon startup, or via dedicated migration scripts. For testing, an in-memory SQLite database is used.
+    Ensure your `docker-compose.yml` is configured to build the `opal-database` service from its Dockerfile and provides the necessary `DATABASE_URL` environment variable.
 
 ## Pre-commit Hooks
 
