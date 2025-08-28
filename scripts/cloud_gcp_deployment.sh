@@ -48,8 +48,12 @@ gcloud config set project $PROJECT_ID
 gcloud config set compute/region $REGION
 
 echo "2. Creating Compute Engine instance: $INSTANCE_NAME..."
-# Startup script to install Docker, Docker Compose, and run services
-STARTUP_SCRIPT=$(cat <<EOF
+# Check if instance already exists
+if gcloud compute instances describe $INSTANCE_NAME --zone=$ZONE --project=$PROJECT_ID &> /dev/null; then
+    echo "VM instance $INSTANCE_NAME already exists. Skipping creation."
+else
+    # Startup script to install Docker, Docker Compose, and run services
+    STARTUP_SCRIPT=$(cat <<EOF
 #! /bin/bash
 # Ensure apt-get update runs first
 sudo apt-get update -y
@@ -87,7 +91,10 @@ gcloud compute instances create $INSTANCE_NAME \
   --tags=opalsuite-vm \
   --project=$PROJECT_ID # Explicitly specify project for instance creation
 
-echo "VM instance $INSTANCE_NAME created. Waiting for it to be ready..."
+    echo "VM instance $INSTANCE_NAME created."
+fi
+
+echo "Waiting for VM instance $INSTANCE_NAME to be ready..."
 # Get VM external IP for SSH check
 VM_EXTERNAL_IP=$(gcloud compute instances describe $INSTANCE_NAME --zone=$ZONE --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
 
@@ -114,15 +121,20 @@ gcloud compute scp --recurse . $INSTANCE_NAME:/opt/opalsuite/ --zone=$ZONE --qui
 echo "4. Starting Docker Compose services on the VM..."
 # SSH into the VM and run docker-compose up
 gcloud compute ssh $INSTANCE_NAME --zone=$ZONE --command="
-  cd /opt/opalsuite/OpalSuite # Navigate to the root of the cloned project
+  cd /opt/opalsuite # Navigate to the root of the cloned project
   docker-compose up -d --build
 "
 
 echo "5. Configuring firewall rules..."
 # Allow TCP traffic on specified application ports
 # Corrected syntax for --allow with multiple ports
+ALLOW_PORTS_ARG=""
+for port in "${APP_PORTS[@]}"; do
+  ALLOW_PORTS_ARG+="--allow=tcp:$port "
+done
+
 gcloud compute firewall-rules create $FIREWALL_RULE_NAME \
-  --allow=tcp:$(IFS=,; echo "${APP_PORTS[*]}") \
+  $ALLOW_PORTS_ARG \
   --target-tags=opalsuite-vm \
   --description="Allow traffic to OpalSuite application ports" \
   --project=$PROJECT_ID # Explicitly specify project for firewall rule
