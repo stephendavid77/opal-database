@@ -60,6 +60,9 @@ def test_create_user(db_session):
         first_name="Test",
         last_name="User",
         roles="user",
+        social_provider="google",
+        social_id="12345",
+        profile_picture_url="http://example.com/pic.jpg",
     )
     db_session.add(new_user)
     db_session.commit()
@@ -69,6 +72,9 @@ def test_create_user(db_session):
     assert new_user.username == "testuser"
     assert new_user.email == "test@example.com"
     assert new_user.roles == "user"
+    assert new_user.social_provider == "google"
+    assert new_user.social_id == "12345"
+    assert new_user.profile_picture_url == "http://example.com/pic.jpg"
 
 
 def test_get_user(db_session):
@@ -135,3 +141,28 @@ def test_delete_user(db_session):
 
     deleted_user = db_session.query(User).filter(User.username == "deleteuser").first()
     assert deleted_user is None
+
+
+def test_create_user_with_social_login(db_session):
+    """Test creating a user with social login details."""
+    social_user = User(
+        username="socialuser",
+        email="social@example.com",
+        social_provider="facebook",
+        social_id="fb_id_67890",
+        profile_picture_url="http://facebook.com/profile.jpg",
+    )
+    db_session.add(social_user)
+    db_session.commit()
+    db_session.refresh(social_user)
+
+    assert social_user.id is not None
+    assert social_user.username == "socialuser"
+    assert social_user.email == "social@example.com"
+    assert social_user.social_provider == "facebook"
+    assert social_user.social_id == "fb_id_67890"
+    assert social_user.profile_picture_url == "http://facebook.com/profile.jpg"
+
+    retrieved_social_user = db_session.query(User).filter(User.social_id == "fb_id_67890").first()
+    assert retrieved_social_user is not None
+    assert retrieved_social_user.username == "socialuser"
